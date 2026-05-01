@@ -1,0 +1,4 @@
+-- Starter products for Forged American
+insert into public.products (slug, name, tagline, price, category, status) values
+  ('cold-beer-tee', 'COLD BEER TEE', 'Ice cold. Like the truth.', 32, 'Tees', 'active'),  ('redneck-tee', 'REDNECK TEE', 'Worn proud. Earned harder.', 32, 'Tees', 'active'),  ('american-tee', 'AMERICAN TEE', 'Stars, stripes, and swagger.', 32, 'Tees', 'active'),  ('dirt-roads-tee', 'DIRT ROADS TEE', 'Where the pavement quits.', 32, 'Tees', 'active'),  ('no-apologies-hoodie', 'NO APOLOGIES HOODIE', 'Heavyweight. Unapologetic.', 65, 'Hoodies', 'active'),  ('backwoods-hoodie', 'BACKWOODS HOODIE', 'Raised in the trees.', 65, 'Hoodies', 'active'),  ('real-america-hat', 'REAL AMERICA HAT', 'Curved brim. Straight talk.', 28, 'Hats', 'active'),  ('loud-proud-hat', 'LOUD & PROUD HAT', 'Snapback. No filter.', 28, 'Hats', 'active')
+on conflict (slug) do nothing;
