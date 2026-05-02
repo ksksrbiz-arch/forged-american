@@ -3,14 +3,30 @@ import Link from 'next/link';
 export function Hero() {
   return (
     <section className="relative min-h-[78vh] md:min-h-[88vh] flex items-center overflow-hidden -mt-20">
-      {/* Background photo */}
+      {/* Background — video on capable devices, JPG fallback otherwise.
+          The poster attribute paints the first frame instantly while the
+          video downloads, so there's no black flash on slow networks. */}
       <div className="absolute inset-0">
-        <img
-          src="/img/forged-hero.jpg"
-          alt=""
-          className="w-full h-full object-cover"
-          loading="eager"
+        {/* CSS-painted fallback: the poster JPG is set as a background-image
+            so the hero is never blank, even before the <video> mounts or if
+            the browser blocks autoplay. The <video> sits on top of it. */}
+        <div
+          className="absolute inset-0 bg-cover bg-center"
+          style={{ backgroundImage: "url('/video/forged-hero-poster.jpg')" }}
+          aria-hidden="true"
         />
+        <video
+          className="absolute inset-0 w-full h-full object-cover"
+          autoPlay
+          muted
+          loop
+          playsInline
+          preload="auto"
+          poster="/video/forged-hero-poster.jpg"
+          aria-hidden="true"
+        >
+          <source src="/video/forged-hero.mp4" type="video/mp4" />
+        </video>
         <div className="absolute inset-0 bg-gradient-to-r from-bg via-bg/70 to-bg/30" />
         <div className="absolute inset-0 bg-gradient-to-t from-bg via-transparent to-transparent" />
         <div className="absolute inset-0 grain pointer-events-none" />

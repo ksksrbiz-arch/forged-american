@@ -46,12 +46,41 @@ export async function getAdminSession(): Promise<AdminSession | null> {
   return await verifySession(token);
 }
 
-export async function checkAdminCredentials(email: string, password: string): Promise<boolean> {
+/**
+ * Returns the list of valid admin {email, hash} pairs.
+ *
+ * Priority:
+ *   1. ADMIN_USERS — JSON array of {email, hash}. Use this for multi-admin.
+ *   2. ADMIN_EMAIL + ADMIN_PASSWORD_HASH — single-admin fallback (original schema).
+ *
+ * Returns [] if neither is configured.
+ */
+function getAdminUsers(): Array<{ email: string; hash: string }> {
+  const json = process.env.ADMIN_USERS;
+  if (json) {
+    try {
+      const parsed = JSON.parse(json);
+      if (Array.isArray(parsed)) {
+        return parsed.filter(
+          (u) => u && typeof u.email === 'string' && typeof u.hash === 'string',
+        );
+      }
+    } catch {
+      // fall through to single-admin fallback
+    }
+  }
   const adminEmail = process.env.ADMIN_EMAIL;
   const adminHash = process.env.ADMIN_PASSWORD_HASH;
-  if (!adminEmail || !adminHash) return false;
-  if (email.toLowerCase() !== adminEmail.toLowerCase()) return false;
-  return await bcrypt.compare(password, adminHash);
+  if (adminEmail && adminHash) return [{ email: adminEmail, hash: adminHash }];
+  return [];
+}
+
+export async function checkAdminCredentials(email: string, password: string): Promise<boolean> {
+  const users = getAdminUsers();
+  if (users.length === 0) return false;
+  const match = users.find((u) => u.email.toLowerCase() === email.toLowerCase());
+  if (!match) return false;
+  return await bcrypt.compare(password, match.hash);
 }
 
 export const SESSION_COOKIE = COOKIE_NAME;
