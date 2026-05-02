@@ -1,23 +1,21 @@
 import { AnnouncementBar } from '@/components/AnnouncementBar';
 import { Header } from '@/components/Header';
 import { Hero } from '@/components/Hero';
+import { SectionIntro } from '@/components/SectionIntro';
 import { FeatureGrid } from '@/components/FeatureGrid';
-import { ProductGrid } from '@/components/ProductGrid';
-import { Story } from '@/components/Story';
+import { BestSellersStrip } from '@/components/BestSellersStrip';
 import { Footer } from '@/components/Footer';
-import { getProducts } from '@/lib/data';
 
-export default async function HomePage() {
-  const products = await getProducts({ limit: 8 });
+export default function HomePage() {
   return (
     <>
       <AnnouncementBar />
       <Header />
-      <main className="flex-1">
+      <main>
         <Hero />
+        <SectionIntro />
         <FeatureGrid />
-        <ProductGrid products={products} title="BEST SELLERS" />
-        <Story />
+        <BestSellersStrip />
       </main>
       <Footer />
     </>
