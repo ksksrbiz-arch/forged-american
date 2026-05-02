@@ -6,6 +6,8 @@ import { FeatureGrid } from '@/components/FeatureGrid';
 import { BestSellersStrip } from '@/components/BestSellersStrip';
 import { Footer } from '@/components/Footer';
 
+export const dynamic = 'force-dynamic';
+
 export default function HomePage() {
   return (
     <>
