@@ -33,12 +33,19 @@ export default async function ProductPage({ params }: { params: { slug: string }
 
   if (db && product.id) {
     try {
-      variants = await db.sql`
+      const rawVariants = await db.sql`
         SELECT id, name, sku, price, inventory, attributes
         FROM product_variants
         WHERE product_id=${product.id}
         ORDER BY created_at ASC
       `;
+      // Postgres NUMERIC comes back as string — normalize to number so
+      // .toFixed() and arithmetic work everywhere downstream.
+      variants = rawVariants.map((v: any) => ({
+        ...v,
+        price: v.price != null ? Number(v.price) : 0,
+        inventory: v.inventory != null ? Number(v.inventory) : 0,
+      }));
       const ratings = await db.sql`
         SELECT rating FROM reviews WHERE product_id=${product.id} AND status='published'
       `;
