@@ -6,7 +6,7 @@ export function Hero() {
       {/* Background photo */}
       <div className="absolute inset-0">
         <img
-          src="https://images.unsplash.com/photo-1568605117036-5fe5e7bab0b7?auto=format&fit=crop&w=2000&q=80"
+          src="/img/forged-hero.jpg"
           alt=""
           className="w-full h-full object-cover"
           loading="eager"
